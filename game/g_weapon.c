@@ -617,6 +617,27 @@ void rocket_touch (edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 	G_FreeEdict (ent);
 }
 
+void rocket_think(edict_t *self)
+{
+	vec3_t	forward;
+	int		damage;
+	float	damage_radius;
+	int		radius_damage;
+	damage = 100 + (int)(random() * 20.0);
+	radius_damage = 120;
+	damage_radius = 120;
+
+	VectorCopy(self->movedir, forward);
+
+	forward[0] = forward[0] + 0.2f;
+	//forward[1] = forward[1] + 0.2f;
+	//forward[2] = forward[2] + 0.2f;
+
+	fire_rocket(self, self->s.origin, forward, damage, 650, damage_radius, radius_damage);
+
+	self->nextthink = level.time + FRAMETIME*60;
+}
+
 void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed, float damage_radius, int radius_damage)
 {
 	edict_t	*rocket;
@@ -642,6 +663,9 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	rocket->dmg_radius = damage_radius;
 	rocket->s.sound = gi.soundindex ("weapons/rockfly.wav");
 	rocket->classname = "rocket";
+
+	rocket->think = rocket_think;
+	rocket->nextthink = level.time + FRAMETIME;
 
 	if (self->client)
 		check_dodge (self, rocket->s.origin, dir, speed);
