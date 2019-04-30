@@ -817,9 +817,10 @@ void PM_CheckJump (void)
 	pm->s.pm_flags |= PMF_JUMP_HELD;
 
 	pm->groundentity = NULL;
-	pml.velocity[2] += 270;
-	if (pml.velocity[2] < 270)
-		pml.velocity[2] = 270;
+	//default value for all three ints below = 270
+	pml.velocity[2] += 270 * 2;
+	if (pml.velocity[2] < 270 * 2)
+		pml.velocity[2] = 270 * 2;
 }
 
 
