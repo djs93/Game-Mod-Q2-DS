@@ -1688,9 +1688,19 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 					break;
 			if (j != i)
 				continue;	// duplicated
-			if (!other->touch)
+			if (!other->touch){
+				//GOOBA STOMP
+				if (!(other->classname[0] == 'm' && other->classname[1] == 'o')){//god, this is a dirty way to check if 'monster' starts the classname
+					continue;
+				}
+				if (other->size[2] / 2.0f + other->s.origin[2] < ent->s.origin[2]){//check to see if the client's origin is above the head of the monster being stomped
+					T_Damage(other, ent, ent, vec3_origin, other->s.origin, vec3_origin, 2000, 0, 0, MOD_CRUSH);
+					gi.centerprintf(ent, "Damaging touched enemy");
+				}
 				continue;
+			}
 			other->touch (other, ent, NULL, NULL);
+
 		}
 
 	}
