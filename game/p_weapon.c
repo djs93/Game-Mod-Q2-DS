@@ -1306,7 +1306,7 @@ void weapon_railgun_fire (edict_t *ent)
 	vec3_t		offset;
 	int			damage;
 	int			kick;
-
+	/*
 	if (deathmatch->value)
 	{	// normal damage is too extreme in dm
 		damage = 100;
@@ -1323,6 +1323,10 @@ void weapon_railgun_fire (edict_t *ent)
 		damage *= 4;
 		kick *= 4;
 	}
+	*/
+	//We don't need damage on the portal gun
+	damage = 0;
+	kick = 0;
 
 	AngleVectors (ent->client->v_angle, forward, right, NULL);
 
