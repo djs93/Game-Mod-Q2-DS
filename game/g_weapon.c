@@ -649,6 +649,43 @@ void fire_rocket (edict_t *self, vec3_t start, vec3_t dir, int damage, int speed
 	gi.linkentity (rocket);
 }
 
+void portal1_touch(edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+{
+	edict_t* portal2;
+	vec3_t tppos;
+	vec3_t forward;
+	portal2 = G_Find(NULL, FOFS(classname), "portal2");
+
+	gi.centerprintf(other, "Touch1");
+
+	if (portal2){
+		AngleVectors(portal2->s.angles, forward, NULL, NULL);
+		VectorCopy(portal2->s.origin, tppos);
+		tppos[0] += forward[0] * 26;
+		tppos[1] += forward[1] * 26;
+		tppos[2] += forward[2] * 26;
+		VectorCopy(tppos, other->s.origin);
+	}
+}
+
+void portal2_touch(edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *surf)
+{
+	edict_t* portal1;
+	vec3_t tppos;
+	vec3_t forward;
+	portal1 = G_Find(NULL, FOFS(classname), "portal1");
+
+	gi.centerprintf(other, "Touch2");
+
+	if (portal1){
+		AngleVectors(portal1->s.angles, forward, NULL, NULL);
+		VectorCopy(portal1->s.origin, tppos);
+		tppos[0] += forward[0] * 26;
+		tppos[1] += forward[1] * 26;
+		tppos[2] += forward[2] * 26;
+		VectorCopy(tppos, other->s.origin);
+	}
+}
 
 /*
 =================
@@ -663,6 +700,9 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	edict_t		*ignore;
 	int			mask;
 	qboolean	water;
+	edict_t*	portal1;
+	vec3_t		normalAngles;
+	vec3_t		spawnPoint;
 
 	VectorMA (start, 8192, aimdir, end);
 	VectorCopy (start, from);
@@ -686,7 +726,32 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 				ignore = NULL;
 
 			if ((tr.ent != self) && !(tr.ent->takedamage)){
-				gi.centerprintf(self, "lul");
+				vectoangles(tr.plane.normal, normalAngles);
+				portal1 = G_Find(NULL, FOFS(classname), "portal1");
+				if (portal1){
+					//delete existing portal
+					G_FreeEdict(portal1);
+				}
+				//spawn new portal at point hit
+				portal1 = G_Spawn();
+				VectorCopy(tr.endpos, spawnPoint);
+				spawnPoint[0] += tr.plane.normal[0] * 5;
+				spawnPoint[1] += tr.plane.normal[1] * 5;
+				spawnPoint[2] += tr.plane.normal[2] * 5;
+				VectorCopy(spawnPoint, portal1->s.origin);
+				VectorCopy(normalAngles, portal1->movedir);
+				VectorCopy(normalAngles, portal1->s.angles);
+				portal1->clipmask = MASK_SHOT;
+				portal1->solid = SOLID_BBOX;
+				portal1->s.effects |= EF_ROCKET; 
+				VectorSet(portal1->mins, -16, -16, -24);
+				VectorSet(portal1->maxs, 16, 16, 32);
+				portal1->s.modelindex = gi.modelindex("models/objects/grenade/tris.md2");
+				portal1->touch = portal1_touch;
+				portal1->classname = "portal1";
+				portal1->s.renderfx |= RF_SHELL_BLUE;
+
+				gi.linkentity(portal1);
 			}
 
 				//T_Damage (tr.ent, self, self, aimdir, tr.endpos, tr.plane.normal, damage, kick, 0, MOD_RAILGUN);
@@ -717,7 +782,7 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 
 /*
 =================
-fire_rail
+fire_rail2
 =================
 */
 void fire_rail2(edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick)
@@ -728,6 +793,9 @@ void fire_rail2(edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 	edict_t		*ignore;
 	int			mask;
 	qboolean	water;
+	edict_t*	portal2;
+	vec3_t		normalAngles;
+	vec3_t		spawnPoint;
 
 	VectorMA(start, 8192, aimdir, end);
 	VectorCopy(start, from);
@@ -751,7 +819,32 @@ void fire_rail2(edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 				ignore = NULL;
 
 			if ((tr.ent != self) && !(tr.ent->takedamage)){
-				gi.centerprintf(self, "lul");
+				vectoangles(tr.plane.normal, normalAngles);
+				portal2 = G_Find(NULL, FOFS(classname), "portal2");
+				if (portal2){
+					//delete existing portal
+					G_FreeEdict(portal2);
+				}
+				//spawn new portal at point hit
+				portal2 = G_Spawn();
+				VectorCopy(tr.endpos, spawnPoint);
+				spawnPoint[0] += tr.plane.normal[0] * 10;
+				spawnPoint[1] += tr.plane.normal[1] * 10;
+				spawnPoint[2] += tr.plane.normal[2] * 10;
+				VectorCopy(spawnPoint, portal2->s.origin);
+				VectorCopy(normalAngles, portal2->movedir);
+				VectorCopy(normalAngles, portal2->s.angles);
+				portal2->clipmask = MASK_SHOT;
+				portal2->solid = SOLID_BBOX;
+				portal2->s.effects |= EF_ROCKET;
+				VectorSet(portal2->mins, -16, -16, -24);
+				VectorSet(portal2->maxs, 16, 16, 32);
+				portal2->s.modelindex = gi.modelindex("models/objects/grenade/tris.md2");
+				portal2->touch = portal2_touch;
+				portal2->classname = "portal2";
+				portal2->s.renderfx |= RF_SHELL_RED | RF_SHELL_GREEN;
+
+				gi.linkentity(portal2);
 			}
 
 			//T_Damage (tr.ent, self, self, aimdir, tr.endpos, tr.plane.normal, damage, kick, 0, MOD_RAILGUN);

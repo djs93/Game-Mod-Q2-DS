@@ -1684,6 +1684,9 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		for (i=0 ; i<pm.numtouch ; i++)
 		{
 			other = pm.touchents[i];
+			if (other != world){
+				gi.centerprintf(ent, "Touching %s", other->classname);
+			}
 			for (j=0 ; j<i ; j++)
 				if (pm.touchents[j] == other)
 					break;
