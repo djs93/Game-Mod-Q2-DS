@@ -661,9 +661,9 @@ void portal1_touch(edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 	if (portal2){
 		AngleVectors(portal2->s.angles, forward, NULL, NULL);
 		VectorCopy(portal2->s.origin, tppos);
-		tppos[0] += forward[0] * 26;
-		tppos[1] += forward[1] * 26;
-		tppos[2] += forward[2] * 26;
+		tppos[0] += forward[0] * 35;
+		tppos[1] += forward[1] * 35;
+		tppos[2] += forward[2] * 35;
 		VectorCopy(tppos, other->s.origin);
 	}
 }
@@ -680,9 +680,9 @@ void portal2_touch(edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 	if (portal1){
 		AngleVectors(portal1->s.angles, forward, NULL, NULL);
 		VectorCopy(portal1->s.origin, tppos);
-		tppos[0] += forward[0] * 26;
-		tppos[1] += forward[1] * 26;
-		tppos[2] += forward[2] * 26;
+		tppos[0] += forward[0] * 35;
+		tppos[1] += forward[1] * 35;
+		tppos[2] += forward[2] * 35;
 		VectorCopy(tppos, other->s.origin);
 	}
 }
@@ -743,7 +743,7 @@ void fire_rail (edict_t *self, vec3_t start, vec3_t aimdir, int damage, int kick
 				VectorCopy(normalAngles, portal1->s.angles);
 				portal1->clipmask = MASK_SHOT;
 				portal1->solid = SOLID_BBOX;
-				portal1->s.effects |= EF_ROCKET; 
+				portal1->s.effects |= EF_ROCKET;
 				VectorSet(portal1->mins, -16, -16, -24);
 				VectorSet(portal1->maxs, 16, 16, 32);
 				portal1->s.modelindex = gi.modelindex("models/objects/grenade/tris.md2");
