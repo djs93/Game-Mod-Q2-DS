@@ -16,10 +16,10 @@ Second IT266 game modification, this one is for Quake 2
 ## Method 1: Create a shortcut (Steam)
 * Go to your desktop and create a new shortcut to Steam.exe
 * After the path to Steam and the final quotation mark in the "Target" category of the shortcut, add:
-  * -applaunch 2320 +set game <name of folder with mod files in it>
+  * -applaunch 2320 +set game [name of folder with mod files in it]
 * When you use this shortcut to launch the game, Quake 2 Mari0 will be loaded!
 ## Method 2: Create a shortcut (Other)
 * Go to your desktop and create a new shortcut to Quake4.exe
 * After the final quotation mark in the "Target" category of the shortcut, add:
-  * +set game <name of folder with mod files in it>
+  * +set game [name of folder with mod files in it]
 * When you use this shortcut to launch the game, Quake 2 Mari0 will be loaded!
