@@ -1684,9 +1684,9 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 		for (i=0 ; i<pm.numtouch ; i++)
 		{
 			other = pm.touchents[i];
-			if (other != world){
-				gi.centerprintf(ent, "Touching %s", other->classname);
-			}
+			//if (other != world){
+			//	gi.centerprintf(ent, "Touching %s", other->classname);
+			//}
 			for (j=0 ; j<i ; j++)
 				if (pm.touchents[j] == other)
 					break;
@@ -1699,7 +1699,7 @@ void ClientThink (edict_t *ent, usercmd_t *ucmd)
 				}
 				if (other->size[2] / 1.5f + other->s.origin[2] < ent->s.origin[2] && ent->velocity[2]<=0.0f){//check to see if the client's origin is above the upper part of the monster being stomped and the player is moving downwards
 					T_Damage(other, ent, ent, vec3_origin, other->s.origin, vec3_origin, 2000, 0, 0, MOD_CRUSH);
-					gi.centerprintf(ent, "Damaging touched enemy");
+					//gi.centerprintf(ent, "Damaging touched enemy");
 				}
 				continue;
 			}

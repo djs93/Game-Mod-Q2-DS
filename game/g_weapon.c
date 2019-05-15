@@ -656,7 +656,7 @@ void portal1_touch(edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 	vec3_t forward;
 	portal2 = G_Find(NULL, FOFS(classname), "portal2");
 
-	gi.centerprintf(other, "Touch1");
+	//gi.centerprintf(other, "Touch1");
 
 	if (portal2){
 		AngleVectors(portal2->s.angles, forward, NULL, NULL);
@@ -675,7 +675,7 @@ void portal2_touch(edict_t *ent, edict_t *other, cplane_t *plane, csurface_t *su
 	vec3_t forward;
 	portal1 = G_Find(NULL, FOFS(classname), "portal1");
 
-	gi.centerprintf(other, "Touch2");
+	//gi.centerprintf(other, "Touch2");
 
 	if (portal1){
 		AngleVectors(portal1->s.angles, forward, NULL, NULL);
